@@ -1,12 +1,26 @@
+import { Link } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
-import LoginForm from "../../components/LoginForm";
+import Card from "../../components/ui/Card";
+import LoginForm from "../../components/auth/LoginForm";
 
 function Login() {
   return (
     <MainLayout>
-      <h1>Login Page</h1>
+      <Card>
+        <h1>Sign In</h1>
 
-      <LoginForm />
+        <p>Welcome back! Please enter your details to sign in.</p>
+
+        <LoginForm />
+
+        <p>
+          <Link to="/forgot-password">Forgot Password</Link>
+        </p>
+
+        <p>
+          Don't have an account? <Link to="/register">Sign Up</Link>
+        </p>
+      </Card>
     </MainLayout>
   );
 }

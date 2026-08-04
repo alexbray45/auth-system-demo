@@ -1,49 +1,57 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
+import RememberMe from "./RememberMe";
 
 function LoginForm() {
+  // State variables to hold the email and password input values
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+  // Validation function to check if the email and password fields are not empty
   const handleSubmit = (event) => {
     event.preventDefault();
 
     setErrorMessage("");
 
-    if (email === "") {
+    if (!email.trim()) {
       setErrorMessage("Email is required.");
       return;
     }
 
-    if (password === "") {
+    if (!password.trim()) {
       setErrorMessage("Password is required.");
       return;
     }
 
-    console.log("Login Successful");
-    console.log(email);
-    console.log(password);
+    // If validation passes, log the email and password to the console and navigate to the dashboard
     navigate("/dashboard");
   };
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <Input
         type="email"
         placeholder="Enter your email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
       />
-      <input
+      <Input
         type="password"
         placeholder="Enter your password"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
       />
-      <button>Login</button>
-      <p>Email: {email}</p>
-      <p>Password: {password}</p>
+      <RememberMe
+        checked={rememberMe}
+        onChange={(event) => setRememberMe(event.target.checked)}
+      />
+
+      <Button>Login</Button>
+
       {errorMessage && <p>{errorMessage}</p>}
     </form>
   );
