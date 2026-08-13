@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import RememberMe from "./RememberMe";
+import authService from "../../services/authService";
 
 function LoginForm() {
   // State variables to hold the email and password input values
@@ -20,7 +21,7 @@ function LoginForm() {
   const navigate = useNavigate();
 
   // Validation function to check if the email and password fields are not empty
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setErrorMessage("");
@@ -35,8 +36,15 @@ function LoginForm() {
       return;
     }
 
-    // If validation passes, log the email and password to the console and navigate to the dashboard
-    navigate("/dashboard");
+    try {
+      const response = await authService.login(email, password);
+
+      console.log(response);
+      // If validation passes, log the email and password to the console and navigate to the dashboard
+      navigate("/dashboard");
+    } catch {
+      setErrorMessage("Unable to login. Please try again");
+    }
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -58,7 +66,7 @@ function LoginForm() {
         onChange={(event) => setRememberMe(event.target.checked)}
       />
 
-      <Button>Login</Button>
+      <Button type="submit">Login</Button>
 
       {errorMessage && <p>{errorMessage}</p>}
     </form>
