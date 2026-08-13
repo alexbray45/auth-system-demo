@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 import Card from "../../components/ui/Card";
 import LoginForm from "../../components/auth/LoginForm";
 
 function Login() {
+  useEffect(() => {
+    document.title = "Enterprise Auth System | Sign In";
+  }, []);
+
   return (
     <MainLayout>
       <Card>
