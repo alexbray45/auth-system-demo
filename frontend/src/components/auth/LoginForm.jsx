@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import RememberMe from "./RememberMe";
@@ -10,6 +11,12 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const emailInputRef = useRef(null);
+  useEffect(() => {
+    emailInputRef.current.focus();
+  }, []);
+
   const navigate = useNavigate();
 
   // Validation function to check if the email and password fields are not empty
@@ -34,6 +41,7 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit}>
       <Input
+        ref={emailInputRef}
         type="email"
         placeholder="Enter your email"
         value={email}
