@@ -1,9 +1,11 @@
 import "dotenv/config";
 import express from "express";
+import jwt from "jsonwebtoken";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import connectDB from "./config/db.js";
 import User from "./models/User.js";
+import authMiddleware from "./middleware/authMiddleware.js";
 
 const app = express();
 
@@ -66,14 +68,52 @@ app.post("/api/auth/login", async (req, res) => {
     });
   }
 
+  const token = jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
+
   res.status(200).json({
     message: "Login successful.",
+    token,
     user: {
       id: user._id,
       name: user.name,
       email: user.email,
     },
   });
+});
+
+app.get("/api/auth/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("Get current user error:", error.message);
+
+    res.status(500).json({
+      message: "Unable to retrieve user.",
+    });
+  }
 });
 
 app.get("/", (req, res) => {

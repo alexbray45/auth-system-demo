@@ -39,6 +39,8 @@ function LoginForm() {
     try {
       const response = await authService.login(email, password);
 
+      localStorage.setItem("token", response.token);
+
       console.log(response);
       // If validation passes, log the email and password to the console and navigate to the dashboard
       navigate("/dashboard");

@@ -15,6 +15,10 @@ const authService = {
 
     return response.data;
   },
+  me: async () => {
+    const response = await api.get("/auth/me");
+    return response.data;
+  },
 };
 
 export default authService;
